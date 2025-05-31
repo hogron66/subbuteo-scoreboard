@@ -88,6 +88,17 @@
       justify-content: center;
     }
 
+    #analogClock {
+      position: fixed;
+      top: 10vh;
+      right: 6vw;
+      font-size: 3.5vh;
+      color: #fdf6c9;
+      font-family: 'LEDReversed', monospace;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
     button {
       padding: 1vh 2vh;
       font-size: 4vh;
@@ -122,18 +133,19 @@
   </style>
 </head>
 <body>
+  <div id="analogClock"></div>
   <div id="overlay">
     <div class="header"><input type="text" id="leagueTitle" value="SUBBUTEO LEAGUE" maxlength="30" style="background:transparent; border:none; color:#fdf6c9; font-size:6.4vh; text-align:center; font-family: 'LEDReversed', monospace; width: 90vw; max-width: 90vw; min-width: 60vw; padding: 0 1vw; margin-bottom: 2vh;" onchange="this.value = this.value.toUpperCase();">
-    <div id="timerDisplay" style="margin-top: 8vh; margin-bottom: 4vh; font-size: 6.4vh;">00:00</div>
+    <div id="timerDisplay" style="margin-top: 8vh; margin-bottom: 4vh; font-size: 6.4vh;">MATCH TIME 00:00</div>
     </div>
     <div class="teams">
       <input type="text" id="teamAName" value="HOME TEAM" maxlength="15" onchange="updateTeamName('A')">
       <input type="text" id="teamBName" value="AWAY TEAM" maxlength="15" onchange="updateTeamName('B')">
     </div>
-    <div class="scores">
-      <div id="scoreA" style="text-align:center;">0</div>
-      <div id="scoreB" style="text-align:center;">0</div>
-    </div>
+    <div class="scores" style="display: flex; justify-content: space-between; width: 100vw; font-size: 8vh;">
+  <div id="scoreA" style="text-align: center; width: 40vw;">0</div>
+  <div id="scoreB" style="text-align: center; width: 40vw;">0</div>
+</div>
     <div class="controls">
       <button onclick="updateScore('A', 1)">A +1</button>
       <button onclick="updateScore('A', -1)">A -1</button>
@@ -177,7 +189,7 @@
     function updateTimerDisplay() {
       const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
       const secs = String(seconds % 60).padStart(2, '0');
-      document.getElementById('timerDisplay').textContent = `${minutes}:${secs}`;
+      document.getElementById('timerDisplay').textContent = `MATCH TIME ${minutes}:${secs}`;
     }
 
     function startTimer() {
