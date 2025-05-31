@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subbuteo Scoreboard</title>
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #fdf6c9;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+    #scoreboard {
+      text-align: center;
+      font-size: 5vw;
+    }
+  </style>
+</head>
+<body>
+  <div id="scoreboard">
+    <h1>Subbuteo Scoreboard</h1>
+    <p>00:00</p>
+    <p>HOME 0 - 0 AWAY</p>
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+        console.log("Service Worker registered.", reg);
+      });
+    }
+  </script>
+</body>
+</html>
