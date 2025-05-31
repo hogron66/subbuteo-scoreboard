@@ -8,37 +8,80 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.png" />
   <style>
-    html, body {
+    @font-face {
+      font-family: 'LEDReversed';
+      src: url('LED_BOARD_REVERSED.ttf') format('truetype');
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background: black;
-      color: #fdf6c9;
-      font-family: monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    }
+
+    html, body {
       height: 100vh;
       width: 100vw;
+      background: black url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'LEDReversed', monospace;
+      color: #fdf6c9;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
       overflow: hidden;
     }
+
     #scoreboard {
-      text-align: center;
-      font-size: 5vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      width: 100vw;
+      height: 100vh;
+      padding: 2vh;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2vw;
+    }
+
+    button {
+      font-size: 3.5vh;
+      padding: 1vh 2vh;
+      background: transparent;
+      border: none;
+      color: #fdf6c9;
+      font-family: 'LEDReversed', monospace;
     }
   </style>
 </head>
 <body>
   <div id="scoreboard">
-    <h1>Subbuteo Scoreboard</h1>
-    <p>00:00</p>
-    <p>HOME 0 - 0 AWAY</p>
+    <h1>SUBBUTEO LEAGUE</h1>
+    <div>
+      <input type="text" value="HOME TEAM" maxlength="15" />
+      <input type="text" value="AWAY TEAM" maxlength="15" />
+    </div>
+    <div>
+      <span>00:00</span>
+    </div>
+    <div>
+      <span>0</span> - <span>0</span>
+    </div>
+    <div class="controls">
+      <button>A +1</button>
+      <button>A -1</button>
+      <button>B +1</button>
+      <button>B -1</button>
+      <button>Start</button>
+      <button>Pause</button>
+      <button>Reset</button>
+    </div>
   </div>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
-        console.log("Service Worker registered.", reg);
-      });
-    }
-  </script>
 </body>
 </html>
