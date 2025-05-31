@@ -1,87 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Subbuteo Scoreboard</title>
-  <meta name="theme-color" content="#000000" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon-192.png" />
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>subbuteostadium.com scoreboard</title>
   <style>
     @font-face {
-      font-family: 'LEDReversed';
-      src: url('LED_BOARD_REVERSED.ttf') format('truetype');
-    }
+  font-family: 'LEDReversed';
+  src: url('https://cdn.shopify.com/s/files/1/0267/8394/0713/files/LED_BOARD_REVERSED.ttf?v=1748448612') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
       height: 100vh;
-      width: 100vw;
-      background: black url('background.png') no-repeat center center fixed;
+      overflow: hidden;
+      position: fixed;
+      background: black url('https://cdn.shopify.com/s/files/1/0267/8394/0713/files/Back_ground_plain.png?v=1748466804') no-repeat center center fixed;
       background-size: cover;
       font-family: 'LEDReversed', monospace;
-      color: #fdf6c9;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      overflow: hidden;
-    }
+      color: #fdf6c9;}
 
-    #scoreboard {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
       padding: 2vh;
+    }
+
+    .header {
+      font-size: 8vh;
+      text-align: center;
+    }
+
+    #timerDisplay {
+      font-size: 8vh;
+      margin-top: 1vh;
+    }
+
+    .teams {
+      display: flex;
+      justify-content: space-between;
+      width: 100vw;
+      font-size: 8vh;
+    }
+
+    .teams input {
+      background: transparent;
+      border: none;
+      color: #fdf6c9;
+      font-size: 6.4vh;
+      font-family: 'LEDReversed', monospace;
+      text-align: center;
+      width: 40vw;
+      max-width: 40vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .scores {
+      display: flex;
+      justify-content: center;
+      gap: 10vw;
+      width: 80vw;
+      font-size: 8vh;
     }
 
     .controls {
       display: flex;
       flex-wrap: wrap;
+      gap: 1vw;
       justify-content: center;
-      gap: 2vw;
     }
 
     button {
-      font-size: 3.5vh;
       padding: 1vh 2vh;
+      font-size: 4vh;
       background: transparent;
+      color: grey;
       border: none;
-      color: #fdf6c9;
       font-family: 'LEDReversed', monospace;
+    }
+
+    @media screen and (orientation: portrait) {
+      body::before {
+        content: "Please rotate your device to landscape mode.";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: black;
+        color: #fdf6c9;
+        font-size: 5vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        text-align: center;
+        padding: 20px;
+      }
+      #overlay {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="scoreboard">
-    <h1>SUBBUTEO LEAGUE</h1>
-    <div>
-      <input type="text" value="HOME TEAM" maxlength="15" />
-      <input type="text" value="AWAY TEAM" maxlength="15" />
+  <div id="overlay">
+    <div class="header"><input type="text" id="leagueTitle" value="SUBBUTEO LEAGUE" maxlength="30" style="background:transparent; border:none; color:#fdf6c9; font-size:6.4vh; text-align:center; font-family: 'LEDReversed', monospace; width: 90vw; max-width: 90vw; min-width: 60vw; padding: 0 1vw; margin-bottom: 2vh;" onchange="this.value = this.value.toUpperCase();">
+    <div id="timerDisplay" style="margin-top: 8vh; margin-bottom: 4vh; font-size: 6.4vh;">00:00</div>
     </div>
-    <div>
-      <span>00:00</span>
+    <div class="teams">
+      <input type="text" id="teamAName" value="HOME TEAM" maxlength="15" onchange="updateTeamName('A')">
+      <input type="text" id="teamBName" value="AWAY TEAM" maxlength="15" onchange="updateTeamName('B')">
     </div>
-    <div>
-      <span>0</span> - <span>0</span>
+    <div class="scores">
+      <div id="scoreA" style="text-align:center;">0</div>
+      <div id="scoreB" style="text-align:center;">0</div>
     </div>
     <div class="controls">
-      <button>A +1</button>
-      <button>A -1</button>
-      <button>B +1</button>
-      <button>B -1</button>
-      <button>Start</button>
-      <button>Pause</button>
-      <button>Reset</button>
+      <button onclick="updateScore('A', 1)">A +1</button>
+      <button onclick="updateScore('A', -1)">A -1</button>
+      <button onclick="updateScore('B', 1)">B +1</button>
+      <button onclick="updateScore('B', -1)">B -1</button>
+      <button onclick="startTimer()">Start</button>
+      <button onclick="pauseTimer()">Pause</button>
+      <button onclick="resetTimer()">Reset Timer</button>
+      <button onclick="resetScores()">Reset Scores</button>
+      <button onclick="toggleFullScreen()">Fullscreen</button>
     </div>
   </div>
+
+  <audio id="cheerSound" src="https://cdn.shopify.com/s/files/1/0267/8394/0713/files/Big-crowd-cheering.mp3?v=1748455337"></audio>
+  <audio id="whistleSound" src="https://cdn.shopify.com/s/files/1/0267/8394/0713/files/referee-blowing-whistle-sound-effect.mp3?v=1748448611"></audio>
+
+  <script>
+    let scoreA = 0;
+    let scoreB = 0;
+    let timer = null;
+    let seconds = 0;
+
+    function updateScore(team, value) {
+      if (team === 'A') {
+        scoreA = Math.max(0, scoreA + value);
+        document.getElementById('scoreA').textContent = scoreA;
+      } else {
+        scoreB = Math.max(0, scoreB + value);
+        document.getElementById('scoreB').textContent = scoreB;
+      }
+      document.getElementById('cheerSound').play();
+    }
+
+    function resetScores() {
+      scoreA = 0;
+      scoreB = 0;
+      document.getElementById('scoreA').textContent = 0;
+      document.getElementById('scoreB').textContent = 0;
+    }
+
+    function updateTimerDisplay() {
+      const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const secs = String(seconds % 60).padStart(2, '0');
+      document.getElementById('timerDisplay').textContent = `${minutes}:${secs}`;
+    }
+
+    function startTimer() {
+      if (timer) return;
+      const whistle = document.getElementById('whistleSound');
+      whistle.currentTime = 0;
+      whistle.play();
+      timer = setInterval(() => {
+        seconds++;
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      timer = null;
+      const whistle = document.getElementById('whistleSound');
+      whistle.currentTime = 0;
+      whistle.play();
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = null;
+      seconds = 0;
+      updateTimerDisplay();
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function updateTeamName(team) {
+      const input = document.getElementById(`team${team}Name`);
+      input.value = input.value.toUpperCase();
+    }
+
+    function updateDigitalClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById("analogClock").textContent = `${h}:${m}:${s}`;
+    }
+
+    window.onload = () => {
+      setInterval(updateDigitalClock, 1000);
+      updateTimerDisplay();
+    }
+  </script>
 </body>
 </html>
